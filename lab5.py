@@ -46,6 +46,17 @@ class BinaryNode:
     def __str__(self):
         return str(self.value)
 
+    def show(self, temp=0):
+        if self != None:
+            if self.right_child != None:
+                self.right_child.show(temp + 1)
+            if self.left_child != None and self.right_child != None:
+                print(' '* 6 * temp, self.value, '->')
+            else:
+                print(' '* 6 * temp, self.value)
+            if self.left_child != None:
+                self.left_child.show(temp + 1)
+
 # node = BinaryNode(1)
 # node.add_left_child(2)
 # node.add_right_child(3)
@@ -58,12 +69,14 @@ class BinaryNode:
 # print(f'{node.left_child} {node.right_child}')
 # print(f'{node.left_child.left_child} {node.left_child.right_child} '
 #       f'{node.right_child.left_child} {node.right_child.right_child}')
+#
+# node.show()
 
 class BinaryTree:
     root: BinaryNode
 
-    def __init__(self, child:'BinaryNode'):
-        self.root = child
+    def __init__(self, value):
+        self.root = BinaryNode(value)
 
     def traverse_in_orderd(self):
         self.root.traverse_in_order()
@@ -74,5 +87,24 @@ class BinaryTree:
     def traverse_pre_order(self, visit: Callable[[Any], None]):
         self.root.traverse_pre_order()
 
-drzewo = BinaryTree(10)
-print(drzewo.root)
+    def show(self):
+        self.root.show()
+
+
+tree = BinaryTree(10)
+
+assert tree.root.value == 10
+
+tree.root.add_left_child(9)
+tree.root.left_child.add_left_child(1)
+tree.root.left_child.add_right_child(3)
+tree.root.add_right_child(2)
+tree.root.right_child.add_left_child(4)
+tree.root.right_child.add_right_child(6)
+
+assert tree.root.right_child.value == 2
+assert tree.root.right_child.is_leaf() is False
+assert tree.root.left_child.left_child.value == 1
+assert tree.root.left_child.left_child.is_leaf() is True
+
+tree.show()
